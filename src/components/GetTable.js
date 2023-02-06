@@ -13,7 +13,7 @@ function GetTable(){
     const [table,setTable] = useState([]);
     
     async function fetchData(){
-      return await axios.get('http://localhost:8080/apipcr/pedido/search')
+      return await axios.get('http://localhost:8080/apipcr/material/search')
             .then((response) => setTable(response.data));
     }
     // const posData = () => {
@@ -26,14 +26,12 @@ function GetTable(){
       // useEffect(() => {
       //   fetchData();
       // },[])
-    
       return (
         <main>
-          <h1>Pedidos List</h1>
           <button onClick={fetchData}>list</button>
           <ul>
             { table && table.length > 0 && table.map((tableObj, index) => (
-                <li key= {index} >{tableObj.id_mat}  {tableObj.nome} {tableObj.cor} {tableObj.tipo} {tableObj.quant}</li>
+                <li key={index} >{tableObj.nome} {tableObj.quant}</li>
               ))}
           </ul>
         </main>

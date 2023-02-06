@@ -1,38 +1,73 @@
 import "bootstrap/dist/css/bootstrap.css";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 
 function Form(){
-    const [form,setForm] = useState([]);
-    let material = {
-        nome:'spray',
-        tipo:'paris',
-        cor:'azul rio claro',
-        und:'und',
-        quant:30
-    };
-    const fetchData = () => {
-        return  axios.post('http://localhost:8080/apipcr/material/create',material)
-              .then((response) => setForm(response.data))
-              .catch((error)=>{console.log(error)})
-              .finally('post concluido');
-      }
-    
-      useEffect(() => {
-        fetchData();
-      },[])
-    
-      return (
-        <main>
-          <h1>Pedidos List</h1>
-          <ul>
-            { form && form.length > 0 && form.map((formObj, index) => (
-                <li key={formObj.nome}>{formObj.tipo} {formObj.quant}</li>
-              ))}
-          </ul>
-        </main>
-      );
+    const [form,setform] = useState({
+      nome:'',
+      tipo:'',
+      cor:'',
+      und:'',
+      quant:null
+    });
+  
+    const handleChange = (event)=>{ 
+    setform({
+      ...form,
+      [event.target.name]: event.target.value,
+    });
+  };
+    const handleSubmit=(event)=>{
+      event.preventDefault();
+      alert("O dado foi inserido");
     }
-    
+
+    const postData = () => {
+    return axios
+      .post("http://localhost:8080/apipcr/material/create", form)
+      .then((response) => console.log(response.data))
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally("post concluido");
+  };
+    return (
+      <form onSubmit={handleSubmit}>
+        <div className="input-group flex-nowrap form-control-sm" >
+          <label className="input-group-text">
+            nome
+          </label>
+          <input type="text" className="form-control-sm" name="nome" value={form.nome} onChange={handleChange}/>
+        </div>
+        <div className="input-group flex-nowrap">
+          <label className="input-group-text">
+            tipo
+          </label>
+          <input type="text" className="form-control-sm" name="tipo" value={form.tipo} onChange={handleChange} />
+        </div>
+        <div className="input-group flex-nowrap">
+          <label className="input-group-text">
+            cor
+          </label>
+          <input type="text" className="form-control-sm" name="cor" value={form.cor} onChange={handleChange}/>
+        </div>
+        <div className="input-group flex-nowrap">
+          <label className="input-group-text">
+            und
+          </label>
+          <input type="text" className="form-control-sm" name="und" value={form.und} onChange={handleChange}/>
+        </div>
+        <div className="input-group flex-nowrap">
+          <label className="input-group-text">
+            quantidade
+          </label>
+          <input type="text" className="form-control-sm" name="quant" value={form.quant} onChange={handleChange}/>
+        </div>
+        <div>
+          <input type="submit" onClick={postData} value="enviar"/>
+        </div>
+      </form>
+  );
+}
 
 export default Form;
